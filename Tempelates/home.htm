@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Sentiment Analysis Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1rem 2rem; position: fixed; width: 100%; top: 0; z-index: 1000; }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: white; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: white; text-decoration: none; transition: opacity 0.3s; padding: 0.5rem; }
+        .nav-links a:hover { opacity: 0.8; background: rgba(255, 255, 255, 0.1); border-radius: 5px; }
+        .login-btn { border: 2px solid white; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px; transition: all 0.3s; }
+        .login-btn:hover { background: white; color: #667eea; }
+        .hero-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding-top: 80px; }
+        .hero-content h1 { font-size: 3rem; margin-bottom: 1rem; animation: fadeInUp 1s ease-out; }
+        .hero-content p { font-size: 1.2rem; margin-bottom: 2rem; animation: fadeInUp 1s ease-out 0.2s both; }
+        .cta-button { background: rgba(255, 255, 255, 0.2); color: white; padding: 1rem 2rem; border: 2px solid white; border-radius: 5px; text-decoration: none; font-size: 1.1rem; transition: all 0.3s; display: inline-block; animation: fadeInUp 1s ease-out 0.4s both; }
+        .cta-button:hover { background: white; color: #667eea; transform: translateY(-2px); }
+        .features-section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: #333; }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .feature-card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: center; transition: transform 0.3s; }
+        .feature-card:hover { transform: translateY(-5px); }
+        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: #333; }
+        .feature-card p { color: #666; line-height: 1.6; }
+        .about-section { background: #f8f9fa; padding: 5rem 2rem; }
+        .about-content { max-width: 800px; margin: 0 auto; text-align: center; }
+        .about-content h2 { font-size: 2.5rem; margin-bottom: 2rem; color: #333; }
+        .about-content p { font-size: 1.1rem; color: #666; margin-bottom: 1.5rem; }
+        .footer { background: #333; color: white; text-align: center; padding: 2rem; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) { .nav-links { display: none; } .hero-content h1 { font-size: 2rem; } .hero-content p { font-size: 1rem; } .features-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">SentimentLab</div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('product') }}">Product</a></li>
+                <li><a href="{{ url_for('services') }}">Services</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
+            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Advanced Sentiment Analysis</h1>
+            <p>Unlock the power of emotions in text with our cutting-edge AI technology</p>
+            <a href="{{ url_for('register') }}" class="cta-button">Get Started Today</a>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title">Why Choose Our Platform?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Our advanced machine learning algorithms provide accurate sentiment analysis with over 95% accuracy rate.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Real-Time Processing</h3>
+                <p>Get instant results with our lightning-fast processing engine that handles thousands of texts per second.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Detailed Insights</h3>
+                <p>Comprehensive analytics dashboard with visualizations, trends, and detailed sentiment breakdowns.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Secure & Private</h3>
+                <p>Your data is protected with enterprise-grade security and privacy measures. We never store your sensitive information.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Multi-Language Support</h3>
+                <p>Analyze sentiment in over 50 languages with our multilingual processing capabilities.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Easy Integration</h3>
+                <p>Simple API integration with comprehensive documentation and SDKs for popular programming languages.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section">
+        <div class="about-content">
+            <h2>About SentimentLab</h2>
+            <p>SentimentLab is a revolutionary platform designed to help businesses and researchers understand the emotional context behind text data. Whether you're analyzing customer feedback, social media posts, or survey responses, our platform provides the insights you need to make data-driven decisions.</p>
+            <p>Built by a team of AI experts and data scientists, SentimentLab combines state-of-the-art natural language processing with an intuitive user interface to deliver powerful sentiment analysis capabilities.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2025 SentimentLab. All rights reserved. | Built for SIH Hackathon</p>
+    </footer>
+</body>
+</html>
