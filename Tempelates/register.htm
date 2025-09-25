@@ -1,200 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Sentiment Analysis Platform</title>
-    <style>
-        /* --- your CSS unchanged --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="laptop" patternUnits="userSpaceOnUse" width="20" height="20"><rect width="20" height="20" fill="none"/><rect x="6" y="8" width="8" height="5" fill="rgba(255,255,255,0.1)" rx="0.5"/><rect x="5" y="13" width="10" height="1" fill="rgba(255,255,255,0.1)" rx="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23laptop)"/></svg>') repeat;
-            animation: float 20s infinite linear;
-            opacity: 0.3;
-        }
-        @keyframes float {
-            0% { transform: translateX(0) translateY(0) rotate(0deg); }
-            100% { transform: translateX(-50px) translateY(-50px) rotate(360deg); }
-        }
-        .navbar { position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 1rem 2rem; z-index: 1000; }
-        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: white; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { color: white; text-decoration: none; transition: opacity 0.3s; }
-        .nav-links a:hover { opacity: 0.8; }
-        .login-btn { border: 2px solid white; color: white; padding: 0.5rem 1rem; text-decoration: none; border-radius: 5px; transition: all 0.3s; }
-        .login-btn:hover { background: white; color: #667eea; }
-        .register-container { background: white; border-radius: 15px; padding: 2rem; width: 450px; max-width: 90vw; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); position: relative; z-index: 10; max-height: 90vh; overflow-y: auto; }
-        .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: #999; cursor: pointer; transition: color 0.3s; }
-        .close-btn:hover { color: #333; }
-        .register-title { text-align: center; font-size: 1.8rem; margin-bottom: 2rem; color: #333; font-weight: 600; }
-        .form-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
-        .form-group { margin-bottom: 1.5rem; position: relative; flex: 1; }
-        .form-group.full-width { flex: none; width: 100%; }
-        .form-group input, .form-group select { width: 100%; padding: 1rem 1rem 1rem 2.5rem; border: 2px solid #e1e1e1; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; outline: none; }
-        .form-group input:focus, .form-group select:focus { border-color: #667eea; }
-        .form-group .icon { position: absolute; left: 0.8rem; top: 50%; transform: translateY(-50%); color: #999; }
-        .terms-checkbox { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.9rem; }
-        .terms-checkbox input[type="checkbox"] { margin-top: 0.2rem; }
-        .terms-checkbox a { color: #667eea; text-decoration: none; }
-        .register-button { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s; }
-        .register-button:hover { transform: translateY(-2px); }
-        .register-button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        .login-link { text-align: center; margin-top: 1.5rem; color: #666; }
-        .login-link a { color: #667eea; text-decoration: none; font-weight: 600; }
-        .password-strength { margin-top: 0.5rem; font-size: 0.8rem; }
-        .strength-bar { height: 4px; background: #e1e1e1; border-radius: 2px; margin-top: 0.3rem; overflow: hidden; }
-        .strength-fill { height: 100%; transition: all 0.3s; border-radius: 2px; }
-        .strength-weak { background: #ff4757; width: 25%; }
-        .strength-medium { background: #ffa502; width: 50%; }
-        .strength-strong { background: #2ed573; width: 75%; }
-        .strength-very-strong { background: #1e90ff; width: 100%; }
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .register-container { width: 350px; padding: 1.5rem; }
-            .form-row { flex-direction: column; gap: 0; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Sentiment Analysis Platform</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .register-container {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        width: 400px;
+        max-width: 90vw;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    .register-title {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+        color: #333;
+        font-weight: 600;
+    }
+    .form-group { margin-bottom: 1.5rem; position: relative; }
+    .form-group input { width: 100%; padding: 0.8rem 1rem; border: 2px solid #e1e1e1; border-radius: 8px; font-size: 1rem; outline: none; }
+    .form-group input:focus { border-color: #667eea; }
+    .register-button {
+        width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white; border: none; padding: 1rem; border-radius: 8px;
+        font-size: 1rem; font-weight: 600; cursor: pointer; transition: transform 0.3s;
+    }
+    .register-button:hover { transform: translateY(-2px); }
+</style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">SentimentLab</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('product') }}">Product</a></li>
-                <li><a href="{{ url_for('services') }}">Services</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
-            <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+
+<div class="register-container">
+    <h2 class="register-title">Create Account</h2>
+    <form id="registerForm" method="POST" action="">
+        <div class="form-group">
+            <input type="text" name="first_name" placeholder="First Name" required>
         </div>
-    </nav>
-
-    <div class="register-container">
-        <button class="close-btn" onclick="window.history.back()">&times;</button>
-        <h2 class="register-title">Create Account</h2>
-        
-        <form id="registerForm" method="POST" action="{{ url_for('register') }}">
-            <div class="form-row">
-                <div class="form-group">
-                    <span class="icon">👤</span>
-                    <input type="text" name="first_name" placeholder="First Name" required>
-                </div>
-                <div class="form-group">
-                    <span class="icon">👤</span>
-                    <input type="text" name="last_name" placeholder="Last Name" required>
-                </div>
-            </div>
-            
-            <div class="form-group full-width">
-                <span class="icon">📧</span>
-                <input type="email" name="email" placeholder="Enter your email" required>
-            </div>
-            
-            <div class="form-group full-width">
-                <span class="icon">📱</span>
-                <input type="tel" name="phone" placeholder="Phone Number" required>
-            </div>
-            
-            <div class="form-group full-width">
-                <span class="icon">🏢</span>
-                <input type="text" name="organization" placeholder="Organization/Company">
-            </div>
-            
-            <div class="form-group full-width">
-                <span class="icon">🔒</span>
-                <input type="password" id="password" name="password" placeholder="Create password" required>
-                <div class="password-strength">
-                    <div class="strength-text">Password strength: <span id="strengthText">Weak</span></div>
-                    <div class="strength-bar">
-                        <div class="strength-fill" id="strengthFill"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group full-width">
-                <span class="icon">🔒</span>
-                <input type="password" id="confirmPassword" placeholder="Confirm password" required>
-            </div>
-            
-            <div class="terms-checkbox">
-                <input type="checkbox" id="terms" required>
-                <label for="terms">I agree to the 
-                    <a href="{{ url_for('terms') }}">Terms of Service</a> and 
-                    <a href="{{ url_for('privacy') }}">Privacy Policy</a>
-                </label>
-            </div>
-            
-            <button type="submit" class="register-button" id="submitBtn">Create Account</button>
-        </form>
-        
-        <div class="login-link">
-            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        <div class="form-group">
+            <input type="text" name="last_name" placeholder="Last Name" required>
         </div>
-    </div>
+        <div class="form-group">
+            <input type="email" name="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" name="password" placeholder="Create Password" required>
+        </div>
+        <div class="form-group">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="terms" required>
+            <label for="terms">I agree to the Terms and Privacy Policy</label>
+        </div>
+        <button type="submit" class="register-button">Create Account</button>
+    </form>
+</div>
 
-    <script>
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const strengthText = document.getElementById('strengthText');
-        const strengthFill = document.getElementById('strengthFill');
-        const submitBtn = document.getElementById('submitBtn');
-        const termsCheckbox = document.getElementById('terms');
+<script>
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirmPassword');
 
-        function checkPasswordStrength(password) {
-            let strength = 0;
-            if (password.length > 6) strength++;
-            if (password.match(/[A-Z]/)) strength++;
-            if (password.match(/[0-9]/)) strength++;
-            if (password.match(/[^A-Za-z0-9]/)) strength++;
+document.getElementById('registerForm').addEventListener('submit', (e) => {
+    if (passwordInput.value !== confirmPasswordInput.value) {
+        e.preventDefault();
+        alert("Passwords do not match!");
+    }
+});
+</script>
 
-            switch (strength) {
-                case 0:
-                case 1:
-                    strengthText.textContent = "Weak";
-                    strengthFill.className = "strength-fill strength-weak";
-                    break;
-                case 2:
-                    strengthText.textContent = "Medium";
-                    strengthFill.className = "strength-fill strength-medium";
-                    break;
-                case 3:
-                    strengthText.textContent = "Strong";
-                    strengthFill.className = "strength-fill strength-strong";
-                    break;
-                case 4:
-                    strengthText.textContent = "Very Strong";
-                    strengthFill.className = "strength-fill strength-very-strong";
-                    break;
-            }
-        }
-
-        passwordInput.addEventListener('input', () => {
-            checkPasswordStrength(passwordInput.value);
-        });
-
-        document.getElementById('registerForm').addEventListener('submit', (e) => {
-            if (passwordInput.value !== confirmPasswordInput.value) {
-                e.preventDefault();
-                alert("Passwords do not match!");
-            }
-        });
-    </script>
 </body>
 </html>

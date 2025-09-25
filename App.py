@@ -1,100 +1,116 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+import mysql.connector
+from werkzeug.security import check_password_hash, generate_password_hash
 
-# The template_folder argument tells Flask where to find your HTML files.
 app = Flask(__name__, template_folder='Tempelates')
+app.secret_key = 'supersecretkey'
 
-# A simple "database" for demonstration purposes. In a real app,
-# you would connect to a proper database.
-users = {
-    'test@example.com': 'password123'
-}
+# --- Database connection ---
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="Oracle@25",
+    database="sih_project"
+)
+cursor = db.cursor(dictionary=True)
 
-# --- Main Website Routes ---
+# --- Ensure admin exists (stored only once) ---
+ADMIN_EMAIL = "admin@example.com"
+ADMIN_PASSWORD = "admin123"  # Set admin password here
 
+cursor.execute("SELECT * FROM Users WHERE email = %s", (ADMIN_EMAIL,))
+if not cursor.fetchone():
+    hashed_admin_password = generate_password_hash(ADMIN_PASSWORD)
+    cursor.execute(
+        "INSERT INTO Users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
+        ("Admin", ADMIN_EMAIL, hashed_admin_password, "admin")
+    )
+    db.commit()
+    print("Admin user created with email:", ADMIN_EMAIL)
+
+# --- Routes ---
 @app.route('/')
 def home():
-    """Renders the main home page."""
     return render_template('home.htm')
 
-@app.route('/product')
-def product():
-    """Renders the product page (a placeholder for now)."""
-    return "This is the Product Page."
-
-@app.route('/services')
-def services():
-    """Renders the services page (a placeholder for now)."""
-    return "This is the Services Page."
-
-@app.route('/contact')
-def contact():
-    """Renders the contact page (a placeholder for now)."""
-    return "This is the Contact Page."
-
-# --- User & Legal Routes ---
-
-# This route now handles both GET and POST requests
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """Renders the login page and handles login form submission."""
     if request.method == 'POST':
-        # Get data from the submitted form. The input name in login.htm is email and password.
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Check for valid credentials (simple check against the 'users' dictionary)
-        if email in users and users[email] == password:
-            # If login is successful, redirect to the user-dashboard page
-            return redirect(url_for('user_dashboard'))
+        # Only check email here, ignore role selection
+        cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+
+        if user and check_password_hash(user['password_hash'], password):
+            # Save session
+            session['user_id'] = user['user_id']
+            session['user_role'] = user['role']
+            session['user_name'] = user['name']
+
+            # Redirect based on role
+            if user['role'] == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return redirect(url_for('user_dashboard'))
         else:
-            # If login fails, render the login page again with an error message
-            error = 'Invalid email or password. Please try again.'
+            error = 'Invalid email or password.'
             return render_template('login.htm', error=error)
-            
-    # For a GET request, just render the login page
     return render_template('login.htm')
 
-# This route now handles both GET and POST requests
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """Renders the registration page and handles form submission."""
     if request.method == 'POST':
-        # Get data from the submitted form fields.
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
+        name = f"{first_name} {last_name}".strip()
         email = request.form.get('email')
-        phone = request.form.get('phone')
-        organization = request.form.get('organization')
         password = request.form.get('password')
+        role = 'public'  # Only public users can register
 
-        # In a real-world application, you would add validation and save this data to a database.
-        # For this example, we'll just add the new user to our dictionary.
-        if email not in users:
-            users[email] = password
-            # After successful registration, redirect the user to the dashboard.
-            return redirect(url_for('user_dashboard'))
-        else:
-            # Handle case where user already exists.
-            error = 'This email is already registered.'
-            return render_template('registerrr.htm', error=error)
-    
-    # For a GET request (when the page is first loaded), just render the template.
-    return render_template('register.htm')  # Matches your file name `registerrr.htm`
+        if not name or not email or not password:
+            error = "All fields are required!"
+            return render_template('register.htm', error=error)
 
-@app.route('/terms')
-def terms():
-    """Renders the Terms of Service page."""
-    return render_template('termsofservice.htm')
+        # Check if email already exists
+        cursor.execute("SELECT * FROM Users WHERE email = %s", (email,))
+        if cursor.fetchone():
+            error = "This email is already registered."
+            return render_template('register.htm', error=error)
 
-@app.route('/privacy')
-def privacy():
-    """Renders the Privacy Policy page."""
-    return render_template('policy_privacy.htm')
+        # Hash password before saving
+        hashed_password = generate_password_hash(password)
+
+        cursor.execute(
+            "INSERT INTO Users (name, email, password_hash, role) VALUES (%s, %s, %s, %s)",
+            (name, email, hashed_password, role)
+        )
+        db.commit()
+        return redirect(url_for('login'))
+    return render_template('register.htm')
+
+@app.route('/admin-dashboard')
+def admin_dashboard():
+    if 'user_role' in session and session['user_role'] == 'admin':
+        cursor.execute("SELECT * FROM Policies")
+        policies = cursor.fetchall()
+        return render_template('admin_dashboard.htm', name=session['user_name'], policies=policies)
+    return redirect(url_for('login'))
 
 @app.route('/user-dashboard')
 def user_dashboard():
-    """Renders the user dashboard page."""
-    return render_template('user-dashboard.htm')
+    if 'user_role' in session and session['user_role'] != 'admin':
+        return render_template('user_dashboard.htm', name=session['user_name'])
+    return redirect(url_for('login'))
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))
+
+# --- Run App ---
 if __name__ == '__main__':
     app.run(debug=True)

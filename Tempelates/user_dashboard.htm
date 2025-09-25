@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Portal - E-Consultation</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+        .header { background: #4a5568; color: white; padding: 1rem; }
+        .header .logo { font-size: 1.5rem; font-weight: bold; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .scheme-card { background: white; border-radius: 10px; padding: 1rem; margin-bottom: 1rem; border-left: 5px solid #667eea; }
+        .scheme-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .scheme-category { font-size: 0.9rem; color: #555; margin-bottom: 0.5rem; }
+        .scheme-description { font-size: 1rem; color: #333; margin-bottom: 0.5rem; }
+        .scheme-comments { margin-top: 0.5rem; padding-left: 1rem; border-left: 2px dashed #ccc; }
+        .comment-author { font-weight: bold; }
+        .comment-text { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">Citizen E-Consultation Portal</div>
+    </div>
+
+    <div class="container">
+        <h2>Available Government Schemes</h2>
+        <div id="schemes-container">
+            {% for scheme in schemes %}
+            <div class="scheme-card">
+                <div class="scheme-title">{{ scheme.title }}</div>
+                <div class="scheme-category">{{ scheme.category }}</div>
+                <div class="scheme-description">{{ scheme.description }}</div>
+                {% if scheme.comments %}
+                <div class="scheme-comments">
+                    {% for comment in scheme.comments %}
+                    <div class="comment">
+                        <div class="comment-author">{{ comment.author }}:</div>
+                        <div class="comment-text">{{ comment.text }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>

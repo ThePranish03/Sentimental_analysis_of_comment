@@ -54,48 +54,70 @@
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <div class="logo">SentimentLab</div>
-            <ul class="nav-links">
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('product') }}">Product</a></li>
-                <li><a href="{{ url_for('services') }}">Services</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
+<nav class="navbar">
+    <div class="nav-content">
+        <div class="logo">SentimentLab</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            {% if session.get('user_role') == 'admin' %}
+                <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
+            {% elif session.get('user_role') %}
+                <li><a href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
+            {% endif %}
+        </ul>
+        {% if session.get('user_role') %}
+            <a href="{{ url_for('logout') }}" class="login-btn">Logout</a>
+        {% else %}
             <a href="{{ url_for('login') }}" class="login-btn">Login</a>
-        </div>
-    </nav>
-
-    <div class="login-container">
-        <button class="close-btn" onclick="window.history.back()">&times;</button>
-        <h2 class="login-title">Login</h2>
-        
-        <form id="loginForm">
-            <div class="form-group">
-                <span class="icon">📧</span>
-                <input type="email" placeholder="Enter your email" required>
-            </div>
-            
-            <div class="form-group">
-                <span class="icon">🔒</span>
-                <input type="password" placeholder="Enter your password" required>
-            </div>
-            
-            <div class="form-options">
-                <label class="remember-me">
-                    <input type="checkbox"> Remember me
-                </label>
-                <a href="#" class="forgot-password">Forgot password?</a>
-            </div>
-            
-            <button type="submit" class="login-button">Login Now</button>
-        </form>
-        
-        <div class="signup-link">
-            Not a member? <a href="{{ url_for('register') }}">Sign up Now</a>
-        </div>
+        {% endif %}
     </div>
+</nav>
+
+<div class="login-container">
+    <button class="close-btn" onclick="window.history.back()">&times;</button>
+    <h2 class="login-title">Login</h2>
+    
+    <!-- Form submits to Flask backend -->
+    <form method="POST" action="{{ url_for('login') }}">
+        {% if error %}
+            <p style="color:red; text-align:center;">{{ error }}</p>
+        {% endif %}
+        
+        <div class="form-group">
+            <span class="icon">📧</span>
+            <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+            <span class="icon">🔒</span>
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Role selection dropdown -->
+        <div class="form-group">
+            <span class="icon">👤</span>
+            <select name="role" required>
+                <option value="">Select Role</option>
+                <option value="admin">Admin</option>
+                <option value="public">Public/Stakeholder</option>
+            </select>
+        </div>
+        
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox"> Remember me
+            </label>
+            <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+        
+        <button type="submit" class="login-button">Login Now</button>
+    </form>
+    
+    <div class="signup-link">
+        Not a member? <a href="{{ url_for('register') }}">Sign up Now</a>
+    </div>
+</div>
+
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {

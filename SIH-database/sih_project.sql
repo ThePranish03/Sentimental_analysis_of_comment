@@ -52,28 +52,15 @@ CREATE TABLE IF NOT EXISTS Logs (
     FOREIGN KEY (performed_by) REFERENCES Users(user_id) ON DELETE SET NULL
 );
 
--- Insert Users
-INSERT INTO Users (name, email, password_hash, role) VALUES
-('Admin User', 'admin@example.com', 'hashedpassword123', 'admin'),
-('Stakeholder A', 'stakeholder@example.com', 'hashedpassword456', 'stakeholder'),
-('Public User1', 'user1@example.com', 'hashedpassword789', 'public')
-ON DUPLICATE KEY UPDATE email=email;
-
--- Insert a Policy
-INSERT INTO Policies (policy_title, policy_description, section) VALUES
-('Clean Energy Policy 2025', 'This policy aims to increase renewable energy adoption in rural areas.', 'Section A')
-ON DUPLICATE KEY UPDATE policy_title=policy_title;
-
--- Insert Comments
-INSERT INTO Comments (user_id, policy_id, comment_text) VALUES
-(3, 1, 'This is a great step towards sustainability.'),
-(2, 1, 'Implementation challenges must be considered.'),
-(3, 1, 'Need subsidies for solar panels in villages.');
-
--- Insert Overall Analysis
-INSERT INTO Analysis (policy_id, summary, sentiment) VALUES
-(1, 'Overall, users support the Clean Energy Policy but highlight concerns regarding implementation and demand subsidies.', 'positive')
-ON DUPLICATE KEY UPDATE summary=summary;
+-- Insert Admin User
+INSERT INTO Users (name, email, password_hash, role)
+VALUES (
+    'Admin',
+    'admin@example.com',
+    -- Hash your password using Python or MySQL's SHA2 (not recommended for production, just for testing)
+    SHA2('admin123', 256),
+    'admin'
+);
 
 --Indexes for easier search
 CREATE INDEX idx_user_id ON Comments(user_id);
@@ -101,14 +88,6 @@ SELECT
 FROM Policies p
 JOIN Analysis a ON p.policy_id = a.policy_id;
 
-INSERT INTO Policies (policy_title, policy_description, section) VALUES
-('Data Privacy Policy 2025', 'Draft law on user data privacy and protection.', 'Section B'),
-('Environmental Action Plan', 'Draft on climate change mitigation.', 'Section C');
-
-INSERT INTO Comments (user_id, policy_id, comment_text) VALUES
-(2, 2, 'This needs more clarity about data sharing.'),
-(3, 2, 'Worried about how personal data will be stored.'),
-(3, 3, 'This is a much-needed initiative!');
 
 CREATE VIEW PolicySummary AS
 SELECT 
